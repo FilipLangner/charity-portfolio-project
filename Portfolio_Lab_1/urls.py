@@ -20,5 +20,8 @@ from good_hands import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.)
+    path('', views.LandingPageView.as_view(), name='landing_page'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('make_donation/', views.MakeDonationView.as_view(), name="make_donation"),
 ]
