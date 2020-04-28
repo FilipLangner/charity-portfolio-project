@@ -1,0 +1,9 @@
+.idea/
+venv-rest/
+Portfolio_Lab_1/local_settings.py
+
+Portfolio_Lab_1/__pycache__/
+good_hands/__pycache__/
+good_hands/migrations/__pycache__/
+__pycache__/
+db.sqlite3
