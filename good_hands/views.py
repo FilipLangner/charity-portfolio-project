@@ -10,7 +10,7 @@ class LandingPageView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['institutions_count'] = Institution.objects.all().count()
+        context['institutions_count'] = Donation.objects.order_by('institution').distinct('institution').count()
         context['donation_qty'] = Donation.objects.all().aggregate(Sum('quantity'))
         return context
 
