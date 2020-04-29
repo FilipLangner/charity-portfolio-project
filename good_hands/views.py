@@ -13,6 +13,8 @@ class LandingPageView(generic.TemplateView):
         context['institutions_donated_to'] = Donation.objects.order_by('institution').distinct('institution').count()
         context['donation_qty'] = Donation.objects.all().aggregate(Sum('quantity'))
         context['intitutions_foundations'] = Institution.objects.filter(type='FU')
+        context['intitutions_ngo'] = Institution.objects.filter(type='OP')
+        context['intitutions_local'] = Institution.objects.filter(type='ZL')
         return context
 
 class LoginView(generic.TemplateView):
