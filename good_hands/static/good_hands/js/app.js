@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function() {
           slide.classList.add("active");
         }
       });
-
+// ---- <input type="radio"
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
