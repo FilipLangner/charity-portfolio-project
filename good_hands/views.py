@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.db.models import Sum
+from django.urls import reverse_lazy
 from django.views import generic
 
 from good_hands.models import Institution, Donation
+from good_hands.forms import MyRegistrationForm
 
 
 class LandingPageView(generic.TemplateView):
@@ -17,11 +19,13 @@ class LandingPageView(generic.TemplateView):
         context['intitutions_local'] = Institution.objects.filter(type='ZL')
         return context
 
-class LoginView(generic.TemplateView):
-    template_name = "good_hands/login.html"
+# class LoginView(generic.TemplateView):
+#     template_name = "good_hands/templates/registration/login.html"
 
-class RegisterView(generic.TemplateView):
+class RegisterView(generic.CreateView):
+    form_class = MyRegistrationForm
     template_name = "good_hands/register.html"
+    success_url = reverse_lazy('login')
 
 class MakeDonationView(generic.TemplateView):
     template_name = "good_hands/form.html"

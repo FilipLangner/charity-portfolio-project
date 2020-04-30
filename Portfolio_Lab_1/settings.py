@@ -109,6 +109,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGIN_REDIRECT_URL = 'landing_page'
+LOGOUT_REDIRECT_URL = 'landing_page'
+
+AUTH_USER_MODEL = 'good_hands.User'
 
 try:
     from Portfolio_Lab_1.local_settings import DATABASES

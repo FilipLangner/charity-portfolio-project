@@ -1,5 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+
+class User(AbstractUser):
+    pass
 
 
 class Category(models.Model):
@@ -20,6 +24,7 @@ class Institution(models.Model):
     description = models.TextField()
     type = models.CharField(max_length=2, choices=TYPE_CHOICES, default=FUNDACJA)
     categories = models.ManyToManyField(Category)
+
 
 class Donation(models.Model):
     quantity = models.IntegerField()
