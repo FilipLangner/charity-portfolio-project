@@ -9,6 +9,9 @@ class User(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=128)
 
+    def __str__(self):
+        return self.name
+
 
 class Institution(models.Model):
     FUNDACJA = 'FU'
@@ -25,6 +28,8 @@ class Institution(models.Model):
     type = models.CharField(max_length=2, choices=TYPE_CHOICES, default=FUNDACJA)
     categories = models.ManyToManyField(Category)
 
+    def __str__(self):
+        return self.name
 
 class Donation(models.Model):
     quantity = models.IntegerField()
@@ -34,7 +39,7 @@ class Donation(models.Model):
     phone_number = models.CharField(max_length=32)
     city = models.CharField(max_length=64)
     zip_code = models.CharField(max_length=32)
-    pick_up_date = models.CharField(max_length=32)
-    pick_up_time = models.CharField(max_length=32)
+    pick_up_date = models.DateField()
+    pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)

@@ -2,6 +2,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django import forms
 
+
+from good_hands.models import Donation
+
 User = get_user_model()
 
 class MyRegistrationForm(UserCreationForm):
@@ -20,3 +23,9 @@ class MyRegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        exclude = ['user']
+

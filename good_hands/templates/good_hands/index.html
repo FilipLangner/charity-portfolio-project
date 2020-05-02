@@ -98,9 +98,7 @@
 
                         <div class="col">
                             <div class="text">
-                                {% for category in foundation.categories.all %}
-                                    {{ category.name }},
-                                {% endfor %}
+                                {{ foundation.categories.all|join:', ' }}
                             </div>
                         </div>
                     </li>
@@ -134,9 +132,7 @@
 
                         <div class="col">
                             <div class="text">
-                                {% for category in foundation.categories.all %}
-                                    {{ category.name }},
-                                {% endfor %}
+                                {{ foundation.categories.all|join:', ' }}
                             </div>
                         </div>
                     </li>
@@ -170,9 +166,7 @@
 
                         <div class="col">
                             <div class="text">
-                                {% for category in foundation.categories.all %}
-                                    {{ category.name }},
-                                {% endfor %}
+                                {{ foundation.categories.all|join:', ' }}
                             </div>
                         </div>
                     </li>
