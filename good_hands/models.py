@@ -31,6 +31,9 @@ class Institution(models.Model):
     def __str__(self):
         return self.name
 
+    def get_categories_ids(self):
+        return ', '.join(self.categories.values('name'))
+
 class Donation(models.Model):
     quantity = models.IntegerField()
     categories = models.ManyToManyField(Category)
