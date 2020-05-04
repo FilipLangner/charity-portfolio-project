@@ -218,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
      * Update form front-end
      * Show next or previous section etc.
      */
+
     updateForm() {
       this.$step.innerText = this.currentStep;
 
@@ -231,6 +232,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
 // ---- <input type="radio"
+      step3FilterInstitutions()
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
@@ -253,3 +255,28 @@ document.addEventListener("DOMContentLoaded", function() {
     new FormSteps(form);
   }
 });
+
+function step1CategoryCheck() {
+  let categoryCheck = $(".checkbox").not(".radio")
+
+  categoryCheck.on('click', function (event) {
+    $(this).parent().parent().toggleClass('categoryIsSelected');
+  })
+}
+step1CategoryCheck()
+
+function step3FilterInstitutions() {
+  let categoryDiv = $(".checkbox").not(".radio").parent().parent()
+  let institutionDiv = $(".my-institution-class")
+  institutionDiv.addClass('hidden')
+  for (let i = 0; i < categoryDiv.length; i++) {
+    if (categoryDiv.eq(i).hasClass('categoryIsSelected')) {
+      for (let j = 0; j < institutionDiv.length; j++) {
+        if (institutionDiv.eq(j).data('category').split(',').includes(categoryDiv.eq(i).find('input').val())) {
+          institutionDiv.eq(j).removeClass('hidden')
+        }
+
+      }
+    }
+  }
+}
