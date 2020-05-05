@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -8,6 +9,7 @@ from good_hands.models import Institution, Donation, Category
 from good_hands.forms import MyRegistrationForm, DonationForm
 
 import json
+
 
 class LandingPageView(generic.TemplateView):
     template_name = "good_hands/index.html"
@@ -27,9 +29,11 @@ class RegisterView(generic.CreateView):
     template_name = "good_hands/register.html"
     success_url = reverse_lazy('login')
 
+
 class MakeDonationView(LoginRequiredMixin, generic.FormView):
     template_name = "good_hands/form.html"
     form_class = DonationForm
+    success_url = reverse_lazy('form_confirmation')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,19 +41,32 @@ class MakeDonationView(LoginRequiredMixin, generic.FormView):
         context['institutions'] = Institution.objects.all()
         return context
 
-def get_institution(request):
-    category_id = request.GET.get('category_id')
-    if category_id:
-        # Only works if one category is selected TODO:change to accomodate multiple categories
-        institutions = Institution.objects.filter(categories=Category.objects.get(pk=category_id))
-    else:
-        institutions = Institution.objects.all()
+    def form_valid(self, form):
+        quantity = form.cleaned_data.get('quantity')
+        institution = form.cleaned_data.get('institution')
+        address = form.cleaned_data.get('address')
+        phone_number = form.cleaned_data.get('phone_number')
+        city = form.cleaned_data.get('city')
+        zip_code = form.cleaned_data.get('zip_code')
+        pick_up_date = form.cleaned_data.get('pick_up_date')
+        pick_up_time = form.cleaned_data.get('pick_up_time')
+        pick_up_comment = form.cleaned_data.get('pick_up_comment')
+        user = self.request.user
+        Donation.objects.create(
+            quantity=quantity,
+            institution=institution,
+            address=address,
+            phone_number=phone_number,
+            city=city,
+            zip_code=zip_code,
+            pick_up_date=pick_up_date,
+            pick_up_time=pick_up_time,
+            pick_up_comment=pick_up_comment,
+            user=user
+        )
+        # do a loop for categories
+        return super().form_valid(form)
 
-    return HttpResponse(create_json(institutions))
 
-
-def create_json(institution):
-    inst_lst = []
-    for item in institution:
-        inst_lst.append({'id': item.id, 'type': item.type, 'name': item.name, 'description': item.description})
-    return json.dumps({'institution': inst_lst})
+class FormConfirmationView(generic.TemplateView):
+    template_name = 'good_hands/form-confirmation.html'
