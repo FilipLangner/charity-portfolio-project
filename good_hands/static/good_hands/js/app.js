@@ -233,6 +233,8 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 // ---- <input type="radio"
       step3FilterInstitutions()
+      formSummary()
+
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
@@ -256,27 +258,51 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
-function step1CategoryCheck() {
-  let categoryCheck = $(".checkbox").not(".radio")
-
-  categoryCheck.on('click', function (event) {
-    $(this).parent().parent().toggleClass('categoryIsSelected');
-  })
-}
-step1CategoryCheck()
-
+// function to only load institutions (in step 3) whose categories have been selected in step 1 of the form
 function step3FilterInstitutions() {
-  let categoryDiv = $(".checkbox").not(".radio").parent().parent()
+  let categoryDiv = $("input[name='categories']:checked")
   let institutionDiv = $(".my-institution-class")
   institutionDiv.addClass('hidden')
   for (let i = 0; i < categoryDiv.length; i++) {
-    if (categoryDiv.eq(i).hasClass('categoryIsSelected')) {
       for (let j = 0; j < institutionDiv.length; j++) {
-        if (institutionDiv.eq(j).data('category').split(',').includes(categoryDiv.eq(i).find('input').val())) {
+        if (institutionDiv.eq(j).data('category').split(',').includes(categoryDiv.eq(i).data('category'))) {
           institutionDiv.eq(j).removeClass('hidden')
-        }
-
       }
     }
   }
+}
+
+function formSummary() {
+  let quantity_in = $("input[name='quantity']")
+  let category_in = $("input[name='categories']:checked")
+  let quantity_out = $("#summary_quantity")
+  let institution_in = $("input[name='organization']:checked").nextAll().eq(1).children().eq(0)
+  let institution_out = $("#summary_institution")
+  let city_in = $("input[name='city']")
+  let city_out = $("#city_out")
+  let address_in = $("input[name='address']")
+  let address_out = $("#address_out")
+  let zip_code_in = $("input[name='zip_code']")
+  let zip_code_out = $("#zip_code_out")
+  let phone_number_in = $("input[name='phone_number']")
+  let phone_number_out = $("#phone_number_out")
+  let pick_up_date_in = $("input[name='pick_up_date']")
+  let pick_up_date_out = $("#pick_up_date_out")
+  let pick_up_time_in = $("input[name='pick_up_time']")
+  let pick_up_time_out = $("#pick_up_time_out")
+  let pick_up_comment_in = $("textarea[name='pick_up_comment']")
+  let pick_up_comment_out = $("#pick_up_comment_out")
+  let category_arr = []
+  for (let i = 0; i < category_in.length; i++) {
+    category_arr.push(category_in.eq(i).data('category'))
+  }
+  quantity_out.text(`${quantity_in.val()} worki kategorii: ${category_arr.join(', ')}`)
+  institution_out.text(`Dla: ${institution_in.text()}`)
+  address_out.text(address_in.val())
+  city_out.text(city_in.val())
+  zip_code_out.text(zip_code_in.val())
+  phone_number_out.text(phone_number_in.val())
+  pick_up_date_out.text(pick_up_date_in.val())
+  pick_up_time_out.text(pick_up_time_in.val())
+  pick_up_comment_out.text(pick_up_comment_in.val())
 }
