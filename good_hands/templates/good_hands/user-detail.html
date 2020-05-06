@@ -1,0 +1,31 @@
+{% extends 'good_hands/base.html' %}
+
+
+{% block content %}
+    <header class="header--main-page">
+        {% include 'good_hands/nav_bar.html' %}
+        <section id="user_detail" class="help">
+            <h2>Dane użytkownika</h2>
+            <div>
+                <ul class="help--slides-items">
+                    <li><h1>Imię: {{ user.first_name }}</h1></li>
+                    <li><h1>Nazwisko: {{ user.last_name }}</h1></li>
+                    <li><h1>E-mail: {{ user.email }}</h1></li>
+                </ul>
+            </div>
+            <div>
+                <ol> <h1>Dary przekazane przez użytkownika:</h1>
+                    {% for donation in donations %}
+                        <li><h3>Przekazałeś worki w ilości: {{ donation.quantity }}; kategorii: {{ donation.categories.all|join:', ' }};
+                            na rzecz: {{ donation.institution.get_type_display }}
+                            {{ donation.institution }};
+                            w dniu: {{ donation.pick_up_date }};
+                            Odebrano: <input name="is_taken" type="checkbox">
+
+                        </h3></li>
+                    {% endfor %}
+                </ol>
+            </div>
+
+        </section>
+{% endblock %}

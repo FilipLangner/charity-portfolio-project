@@ -42,15 +42,24 @@ class MakeDonationView(LoginRequiredMixin, generic.FormView):
         return context
 
     def form_valid(self, form):
-        quantity = form.cleaned_data.get('quantity')
-        institution = form.cleaned_data.get('institution')
-        address = form.cleaned_data.get('address')
-        phone_number = form.cleaned_data.get('phone_number')
-        city = form.cleaned_data.get('city')
-        zip_code = form.cleaned_data.get('zip_code')
-        pick_up_date = form.cleaned_data.get('pick_up_date')
-        pick_up_time = form.cleaned_data.get('pick_up_time')
-        pick_up_comment = form.cleaned_data.get('pick_up_comment')
+        # quantity = form.cleaned_data.get('quantity')
+        # institution = form.cleaned_data.get('institution')
+        # address = form.cleaned_data.get('address')
+        # phone_number = form.cleaned_data.get('phone_number')
+        # city = form.cleaned_data.get('city')
+        # zip_code = form.cleaned_data.get('zip_code')
+        # pick_up_date = form.cleaned_data.get('pick_up_date')
+        # pick_up_time = form.cleaned_data.get('pick_up_time')
+        # pick_up_comment = form.cleaned_data.get('pick_up_comment')
+        quantity = form.cleaned_data['quantity']
+        institution = form.cleaned_data['organization']
+        address = form.cleaned_data['address']
+        phone_number = form.cleaned_data['phone_number']
+        city = form.cleaned_data['city']
+        zip_code = form.cleaned_data['zip_code']
+        pick_up_date = form.cleaned_data['pick_up_date']
+        pick_up_time = form.cleaned_data['pick_up_time']
+        pick_up_comment = form.cleaned_data['pick_up_comment']
         user = self.request.user
         Donation.objects.create(
             quantity=quantity,
@@ -70,3 +79,12 @@ class MakeDonationView(LoginRequiredMixin, generic.FormView):
 
 class FormConfirmationView(generic.TemplateView):
     template_name = 'good_hands/form-confirmation.html'
+
+
+class UserDetailView(generic.TemplateView):
+    template_name = 'good_hands/user-detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['donations'] = Donation.objects.filter(user=self.request.user)
+        return context
