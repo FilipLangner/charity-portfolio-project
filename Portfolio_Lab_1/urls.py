@@ -29,4 +29,5 @@ urlpatterns = [
     path('make_donation/', views.MakeDonationView.as_view(), name="make_donation"),
     path('form_confirmation/', views.FormConfirmationView.as_view(), name="form_confirmation"),
     path('user_detail/', views.UserDetailView.as_view(), name='user_detail'),
+    path('donation_taken/<int:donation_id>/', views.DonationIsTakenView.as_view(), name='donation_taken'),
 ]

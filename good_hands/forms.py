@@ -29,3 +29,12 @@ class DonationForm(forms.ModelForm):
         model = Donation
         exclude = ['user']
 
+
+class DonationIsTakenForm(forms.ModelForm):
+    is_taken = forms.BooleanField(label='Dar odebrany:', required=False)
+    class Meta:
+        model = Donation
+        fields = ['is_taken']
+
+
+

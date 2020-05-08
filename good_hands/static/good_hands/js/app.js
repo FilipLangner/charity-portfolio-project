@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 
       // Form submit
-      this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
+      // this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
     }
 
     /**
@@ -276,7 +276,7 @@ function formSummary() {
   let quantity_in = $("input[name='quantity']")
   let category_in = $("input[name='categories']:checked")
   let quantity_out = $("#summary_quantity")
-  let institution_in = $("input[name='organization']:checked").nextAll().eq(1).children().eq(0)
+  let institution_in = $("input[name='institution']:checked").nextAll().eq(1).children().eq(0)
   let institution_out = $("#summary_institution")
   let city_in = $("input[name='city']")
   let city_out = $("#city_out")

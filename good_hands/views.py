@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
 from good_hands.models import Institution, Donation, Category
-from good_hands.forms import MyRegistrationForm, DonationForm
+from good_hands.forms import MyRegistrationForm, DonationForm, DonationIsTakenForm
 
 import json
 
@@ -42,17 +42,8 @@ class MakeDonationView(LoginRequiredMixin, generic.FormView):
         return context
 
     def form_valid(self, form):
-        # quantity = form.cleaned_data.get('quantity')
-        # institution = form.cleaned_data.get('institution')
-        # address = form.cleaned_data.get('address')
-        # phone_number = form.cleaned_data.get('phone_number')
-        # city = form.cleaned_data.get('city')
-        # zip_code = form.cleaned_data.get('zip_code')
-        # pick_up_date = form.cleaned_data.get('pick_up_date')
-        # pick_up_time = form.cleaned_data.get('pick_up_time')
-        # pick_up_comment = form.cleaned_data.get('pick_up_comment')
         quantity = form.cleaned_data['quantity']
-        institution = form.cleaned_data['organization']
+        institution = form.cleaned_data['institution']
         address = form.cleaned_data['address']
         phone_number = form.cleaned_data['phone_number']
         city = form.cleaned_data['city']
@@ -61,7 +52,8 @@ class MakeDonationView(LoginRequiredMixin, generic.FormView):
         pick_up_time = form.cleaned_data['pick_up_time']
         pick_up_comment = form.cleaned_data['pick_up_comment']
         user = self.request.user
-        Donation.objects.create(
+        categories = form.cleaned_data['categories']
+        donation = Donation.objects.create(
             quantity=quantity,
             institution=institution,
             address=address,
@@ -74,6 +66,9 @@ class MakeDonationView(LoginRequiredMixin, generic.FormView):
             user=user
         )
         # do a loop for categories
+        for category in categories:
+            donation.categories.add(category)
+
         return super().form_valid(form)
 
 
@@ -86,5 +81,18 @@ class UserDetailView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['donations'] = Donation.objects.filter(user=self.request.user)
+        context['donations'] = Donation.objects.filter(user=self.request.user).order_by(
+            'is_taken',
+            'pick_up_date'
+        )
         return context
+
+
+class DonationIsTakenView(generic.UpdateView):
+    form_class = DonationIsTakenForm
+    template_name = "good_hands/donation_is_taken.html"
+    success_url = reverse_lazy('user_detail')
+    # initial = {'is_taken': True}
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Donation, id=self.kwargs.get('donation_id'))

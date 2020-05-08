@@ -102,7 +102,7 @@
                         <div class="form-group form-group--checkbox my-institution-class hidden"
                              data-category="{{ institution.categories.all|join:',' }}">
                             <label>
-                                <input type="radio" name="organization" value="{{ institution.id }}"/>
+                                <input type="radio" name="institution" value="{{ institution.id }}"/>
                                 <span class="checkbox radio"></span>
                                 <span class="description">
                                   <div class="title">{{ institution.get_type_display }} "{{ institution.name }}"</div>
@@ -229,16 +229,34 @@
             </form>
         </div>
     </section>
-    <div class="form-group">
+
+    {#    <div class="form-group">#}
+    {#    {% if form.errors %}#}
+    {#        {% for field in form %}#}
+    {#            {{ field.errors }} {{ field }}#}
+    {#        {% endfor %}#}
+    {#    {% endif %}#}
+    {#    </div>#}
+    {#    {% if form.non_field_errors %}#}
+    {#        <div class="non-field-errors">#}
+    {#            {% for err in form.non_field_errors %}#}
+    {#                <p class="form-error">{{ err }}</p>#}
+    {#            {% endfor %}#}
+    {#        </div>#}
+    {#    {% endif %}#}
+    {% if form.errors %}
         {% for field in form %}
-            {{ field.errors }}
-        {% endfor %}
-    </div>
-    {% if form.non_field_errors %}
-        <div class="non-field-errors">
-            {% for err in form.non_field_errors %}
-                <p class="form-error">{{ err }}</p>
+            {{ field }}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
             {% endfor %}
-        </div>
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
     {% endif %}
 {% endblock %}

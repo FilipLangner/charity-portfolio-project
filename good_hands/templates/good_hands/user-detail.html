@@ -2,9 +2,9 @@
 
 
 {% block content %}
-    <header class="header--main-page">
+    <header class="header--form-page">
         {% include 'good_hands/nav_bar.html' %}
-        <section id="user_detail" class="help">
+        <div class="slogan container container--90">
             <h2>Dane użytkownika</h2>
             <div>
                 <ul class="help--slides-items">
@@ -16,16 +16,24 @@
             <div>
                 <ol> <h1>Dary przekazane przez użytkownika:</h1>
                     {% for donation in donations %}
-                        <li><h3>Przekazałeś worki w ilości: {{ donation.quantity }}; kategorii: {{ donation.categories.all|join:', ' }};
+                        <li><h3 {% if donation.is_taken %} style="background-color: lightgray" {% endif %}>
+                            Przekazałeś worki w ilości: {{ donation.quantity }}; kategorii:
+                            {{ donation.categories.all|join:', ' }};
                             na rzecz: {{ donation.institution.get_type_display }}
                             {{ donation.institution }};
-                            w dniu: {{ donation.pick_up_date }};
-                            Odebrano: <input name="is_taken" type="checkbox">
+                            Status:
+                            {% if donation.is_taken %}
+                            odebrano
+                            {% else %}
+                            nie odebrano
+                            {% endif %}
+                            <button><a href="{% url 'donation_taken' donation.id %}">Zmień status daru</a></button>
+
 
                         </h3></li>
                     {% endfor %}
                 </ol>
             </div>
 
-        </section>
+        </div>
 {% endblock %}

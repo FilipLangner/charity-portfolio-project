@@ -1,0 +1,13 @@
+{% extends 'good_hands/base.html' %}
+
+{% block content %}
+    <header class="header--form-page">
+        {% include 'good_hands/nav_bar.html' %}
+        <div class="about-us--text">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Potwierdź status daru</button>
+            </form>
+        </div>
+{% endblock %}
